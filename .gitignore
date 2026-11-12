@@ -1,0 +1,25 @@
+# Compilación
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
+
+# Visual Studio / Rider / VS Code
+.vs/
+.idea/
+.vscode/
+
+# Resultados de pruebas
+TestResults/
+*.trx
+coverage*.xml
+
+# Sistema operativo
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Datos locales de la aplicación
+*.json.tmp
