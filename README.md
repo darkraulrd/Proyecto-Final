@@ -46,7 +46,7 @@ Los datos de la Unidad 6 se guardan en `%LocalAppData%\ProyectoIntegradorPOO\est
 ## Organización
 
 ```
-Proyecto Final/
+LanzadorProyectos/
 ├── ProyectoIntegradorPOO.sln
 ├── README.md
 ├── Documentation/            ARCHITECTURE.md · CHANGELOG.md · ACTIVIDADES.md

@@ -2,6 +2,11 @@
 
 El formato sigue la idea de [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [1.0.1] — 2026-11-15
+
+### Cambiado
+- La solución se trasladó a la carpeta `INF-5130\LanzadorProyectos`. El proyecto vacío que existía allí (`LanzadorProyectos`, con `Form1`) se conservó en `INF-5130\LanzadorProyectos_respaldo`.
+
 ## [1.0.0] — 2026-11-12
 
 ### Base del proyecto
