@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ENLACE al proyecto original INF-5130\Prueba ("Menu Principal").
+
+    El .csproj original no compila por sí solo: incluye los .cs de sus subcarpetas
+    (RM_100758645_U1 y RM_100758645_U2, que son proyectos aparte) y su Program.cs
+    crea "new Menu()" aunque el formulario se llama Form1.
+
+    Este proyecto NO copia nada: enlaza (Link) únicamente los archivos del formulario
+    original, de modo que cualquier cambio en la carpeta Prueba se refleja aquí.
+  -->
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <RootNamespace>Prueba</RootNamespace>
+    <AssemblyName>MenuPrincipal.Enlace</AssemblyName>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <CarpetaOriginal>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\..\..\Prueba'))</CarpetaOriginal>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="$(CarpetaOriginal)\Menu.cs" Link="Original\Menu.cs" />
+    <Compile Include="$(CarpetaOriginal)\Menu.Designer.cs" Link="Original\Menu.Designer.cs" DependentUpon="Menu.cs" />
+    <EmbeddedResource Include="$(CarpetaOriginal)\Menu.resx" Link="Original\Menu.resx" DependentUpon="Menu.cs" LogicalName="Prueba.Form1.resources" />
+  </ItemGroup>
+
+</Project>

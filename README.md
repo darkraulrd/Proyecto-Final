@@ -6,6 +6,15 @@ Aplicación de escritorio en **C# / Windows Forms** que reúne, en una sola solu
 - **Solución:** `ProyectoIntegradorPOO.sln`
 - **Proyecto principal:** `ProyectoIntegradorPOO`
 
+## Proyectos originales enlazados
+
+Además de sus propias actividades, el integrador **enlaza los proyectos entregados durante el curso** (carpetas hermanas dentro de `INF-5130`) y los muestra dentro de la aplicación como UserControls:
+
+- Los proyectos de **consola** se ejecutan en una consola real incrustada (`UcConsolaIncrustada`), con el mismo comportamiento que al abrirlos por separado.
+- Los proyectos **Windows Forms** muestran su formulario original (`UcFormularioIncrustado`).
+
+Por eso la solución debe estar dentro de `INF-5130\LanzadorProyectos`, junto a esas carpetas: al compilar, se compilan también los originales. Un clon del repositorio sin esas carpetas no compilará los enlaces. La lista completa está en [Documentation/ACTIVIDADES.md](Documentation/ACTIVIDADES.md).
+
 ## Objetivo general
 
 Demostrar la evolución del aprendizaje de la Programación Orientada a Objetos: desde la encapsulación (Unidad 2) hasta el manejo de excepciones y la persistencia de datos (Unidad 6), sin eliminar ni reemplazar las actividades anteriores.
@@ -50,11 +59,13 @@ LanzadorProyectos/
 ├── ProyectoIntegradorPOO.sln
 ├── README.md
 ├── Documentation/            ARCHITECTURE.md · CHANGELOG.md · ACTIVIDADES.md
+├── Enlaces/MenuPrincipal.Enlace/  Enlace a los archivos del formulario de INF-5130\Prueba
 ├── ProyectoIntegradorPOO/    Aplicación Windows Forms
 │   ├── Program.cs
 │   ├── InformacionAplicacion.cs
 │   ├── Forms/                FrmPrincipal, FrmInicio, FrmAcercaDe
 │   │   ├── Comun/            Formulario base, tema visual, navegación, catálogo de actividades
+│   │   ├── Originales/       UcConsolaIncrustada, UcFormularioIncrustado, FrmProyectoOriginal
 │   │   └── Unidad2 … Unidad6/  Un formulario por actividad
 │   ├── Models/Unidad2 … Unidad6/  Clases del dominio de cada unidad
 │   ├── Interfaces/           ICalculable, IEntidad, IRepositorio<T>
@@ -65,6 +76,11 @@ LanzadorProyectos/
 ```
 
 Consulte [Documentation/ACTIVIDADES.md](Documentation/ACTIVIDADES.md) para el listado de actividades y [Documentation/ARCHITECTURE.md](Documentation/ARCHITECTURE.md) para la arquitectura.
+
+## Cómo enlazar otro proyecto original
+
+1. En `ProyectoIntegradorPOO.csproj`, agregar un `ProjectReference` a su `.csproj` (con `ReferenceOutputAssembly="false"` si es de consola).
+2. En `Forms/Comun/CatalogoActividades.cs`, agregar una línea `Consola(...)` o `Formulario(...)` en su unidad.
 
 ## Cómo agregar una actividad nueva
 

@@ -19,24 +19,27 @@ public partial class FrmInicio : FrmActividadBase
     {
         lblValorAsignatura.Text = $"{InformacionAplicacion.Asignatura}\n{InformacionAplicacion.Institucion}\nPeríodo {InformacionAplicacion.Periodo}";
         lblValorDesarrollador.Text = $"{InformacionAplicacion.Desarrollador}\nMatrícula: {InformacionAplicacion.Matricula}";
-        lblValorActividades.Text = $"{CatalogoActividades.Actividades.Count} actividades\nen {CatalogoActividades.Unidades.Count} unidades";
+        int originales = CatalogoActividades.Originales.Count();
+        lblValorActividades.Text = $"{originales} proyectos originales enlazados\n" +
+                                   $"{CatalogoActividades.Actividades.Count - originales} versiones integradas\n" +
+                                   $"en {CatalogoActividades.Unidades.Count} unidades";
 
         dgvActividades.DataSource = CatalogoActividades.Actividades
             .Select(a => new
             {
                 Unidad = a.Unidad,
                 Actividad = a.Nombre,
-                Formulario = a.Formulario,
+                Origen = a.Origen,
                 Conceptos = a.Conceptos,
                 Estado = a.Estado
             })
             .ToList();
 
         dgvActividades.Columns[0].FillWeight = 35;
-        dgvActividades.Columns[1].FillWeight = 110;
-        dgvActividades.Columns[2].FillWeight = 95;
-        dgvActividades.Columns[3].FillWeight = 210;
-        dgvActividades.Columns[4].FillWeight = 55;
+        dgvActividades.Columns[1].FillWeight = 100;
+        dgvActividades.Columns[2].FillWeight = 140;
+        dgvActividades.Columns[3].FillWeight = 200;
+        dgvActividades.Columns[4].FillWeight = 50;
     }
 
     private void dgvActividades_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)

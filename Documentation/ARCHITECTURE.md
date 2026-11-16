@@ -41,13 +41,30 @@ Exceptions: ValidacionException · PersistenciaException · RegistroDuplicadoExc
 | `Services/` | `ServicioEstudiantes` (validación + CRUD) y `CalculadoraSegura` (operaciones que lanzan excepciones). |
 | `Repositories/` | `RepositorioJson<T>`: única clase que lee y escribe archivos. |
 | `Exceptions/` | Excepciones personalizadas de la Unidad 6. |
+| `Forms/Originales/` | `ProyectoOriginal`, `UbicacionProyectos`, `FrmProyectoOriginal` y los UserControls que muestran los proyectos originales. |
+| `..\Enlaces\MenuPrincipal.Enlace` | Proyecto que enlaza (Link) los archivos del formulario de `INF-5130\Prueba`. |
 
 ## Navegación
 
-1. `FrmPrincipal` construye los submenús de cada unidad y los botones del panel lateral recorriendo `CatalogoActividades.Actividades`.
-2. Al elegir una actividad se llama a `NavegadorActividades.Mostrar(tipo, crear)`.
-3. Si el formulario ya existe se muestra de nuevo (conserva su estado); si no, se crea, se incrusta (`TopLevel = false`, `Dock = Fill`) y se guarda en un diccionario.
+1. `FrmPrincipal` construye los submenús de cada unidad y los botones del panel lateral recorriendo `CatalogoActividades.Actividades` (primero los proyectos originales, después las versiones integradas).
+2. Al elegir una actividad se llama a `NavegadorActividades.Mostrar(clave, crear)`. La clave es el nombre del formulario o, para un original, `FrmProyectoOriginal:<carpeta>`.
+3. Si la pantalla ya existe se muestra de nuevo (conserva su estado, incluida una consola en ejecución); si no, se crea, se incrusta (`TopLevel = false`, `Dock = Fill`) y se guarda en un diccionario.
 4. El evento `FormularioMostrado` actualiza el indicador de unidad, la barra de estado y resalta el botón activo.
+
+## Proyectos originales enlazados
+
+```
+INF-5130\
+├── LanzadorProyectos\ProyectoIntegradorPOO   ──ProjectReference──►  FormCursoEstudiante, Pedidos      (Windows Forms)
+│                                             ──ProjectReference──►  Enlaces\MenuPrincipal.Enlace ──Link──► Prueba\Menu.cs …
+│                                             ──ProjectReference (solo compilar)──► Banco, Nomina, … (consola)
+└── <carpetas originales sin modificar>
+```
+
+- **Compilación:** los `ProjectReference` hacen que al compilar el integrador se compilen también los originales. La ruta de `INF-5130` y la configuración (`Debug`/`Release`) se graban en el ensamblado con `AssemblyMetadata`; `UbicacionProyectos` las lee para encontrar cada `.exe`, sin rutas fijas en el código.
+- **Consola (`UcConsolaIncrustada`):** inicia el `.exe` con `conhost.exe` (la consola clásica de Windows), localiza la ventana del proceso, le quita los bordes y la convierte en ventana hija del panel (`SetParent`, `MoveWindow`). Como es una consola real, `ReadLine`, `ReadKey`, `Clear` y las tildes funcionan igual que fuera del integrador. Los procesos se cierran al detenerlos, al destruir el control o al salir de la aplicación.
+- **Windows Forms (`UcFormularioIncrustado`):** crea el formulario original con `TopLevel = false` y lo coloca en un panel con desplazamiento. `Tema.Aplicar` no entra en formularios incrustados, así conservan su aspecto.
+- **`Prueba` (Menu Principal):** su `.csproj` no compila por sí solo (incluye los `.cs` de sus subproyectos y `Program.cs` crea `new Menu()` en vez de `Form1`). `MenuPrincipal.Enlace` compila solo `Menu.cs`, `Menu.Designer.cs` y `Menu.resx` mediante `Link`, sin tocar el original.
 
 Cada actividad conserva su tamaño mínimo de diseño; si la ventana es pequeña, el área de contenido muestra barras de desplazamiento.
 

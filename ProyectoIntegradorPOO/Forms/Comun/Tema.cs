@@ -29,6 +29,10 @@ public static class Tema
     {
         foreach (Control control in raiz.Controls)
         {
+            // Un formulario incrustado (proyecto original) conserva su aspecto propio.
+            if (control is Form)
+                continue;
+
             switch (control)
             {
                 case Button boton:

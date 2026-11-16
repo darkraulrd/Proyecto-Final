@@ -20,6 +20,7 @@ partial class FrmPrincipal
         components = new System.ComponentModel.Container();
         menuPrincipal = new MenuStrip();
         mnuInicio = new ToolStripMenuItem();
+        mnuUnidad1 = new ToolStripMenuItem();
         mnuUnidad2 = new ToolStripMenuItem();
         mnuUnidad3 = new ToolStripMenuItem();
         mnuUnidad4 = new ToolStripMenuItem();
@@ -53,7 +54,7 @@ partial class FrmPrincipal
         //
         menuPrincipal.Font = new Font("Segoe UI", 9F);
         menuPrincipal.LayoutStyle = ToolStripLayoutStyle.Flow;
-        menuPrincipal.Items.AddRange(new ToolStripItem[] { mnuInicio, mnuUnidad2, mnuUnidad3, mnuUnidad4, mnuUnidad5, mnuUnidad6, mnuAcercaDe, mnuSalir });
+        menuPrincipal.Items.AddRange(new ToolStripItem[] { mnuInicio, mnuUnidad1, mnuUnidad2, mnuUnidad3, mnuUnidad4, mnuUnidad5, mnuUnidad6, mnuAcercaDe, mnuSalir });
         menuPrincipal.Location = new Point(0, 0);
         menuPrincipal.Name = "menuPrincipal";
         menuPrincipal.Size = new Size(1280, 25);
@@ -65,6 +66,12 @@ partial class FrmPrincipal
         mnuInicio.Size = new Size(54, 21);
         mnuInicio.Text = "&Inicio";
         mnuInicio.Click += mnuInicio_Click;
+        //
+        // mnuUnidad1
+        //
+        mnuUnidad1.Name = "mnuUnidad1";
+        mnuUnidad1.Size = new Size(200, 21);
+        mnuUnidad1.Text = "Unidad &1 — Introducción a la programación";
         //
         // mnuUnidad2
         //
@@ -296,6 +303,7 @@ partial class FrmPrincipal
 
     private MenuStrip menuPrincipal;
     private ToolStripMenuItem mnuInicio;
+    private ToolStripMenuItem mnuUnidad1;
     private ToolStripMenuItem mnuUnidad2;
     private ToolStripMenuItem mnuUnidad3;
     private ToolStripMenuItem mnuUnidad4;

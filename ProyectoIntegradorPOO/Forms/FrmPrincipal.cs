@@ -10,7 +10,7 @@ namespace ProyectoIntegradorPOO.Forms;
 public partial class FrmPrincipal : Form
 {
     private readonly NavegadorActividades navegador;
-    private readonly Dictionary<Type, Button> botonesNavegacion = new Dictionary<Type, Button>();
+    private readonly Dictionary<string, Button> botonesNavegacion = new Dictionary<string, Button>();
 
     public FrmPrincipal()
     {
@@ -43,6 +43,7 @@ public partial class FrmPrincipal : Form
     {
         Dictionary<int, ToolStripMenuItem> menus = new Dictionary<int, ToolStripMenuItem>
         {
+            [1] = mnuUnidad1,
             [2] = mnuUnidad2,
             [3] = mnuUnidad3,
             [4] = mnuUnidad4,
@@ -50,14 +51,28 @@ public partial class FrmPrincipal : Form
             [6] = mnuUnidad6
         };
 
-        foreach (ActividadInfo actividad in CatalogoActividades.Actividades)
+        foreach ((int numero, ToolStripMenuItem menuUnidad) in menus)
         {
-            if (!menus.TryGetValue(actividad.Unidad, out ToolStripMenuItem? menuUnidad))
-                continue;
+            List<ActividadInfo> actividades = CatalogoActividades.DeUnidad(numero).ToList();
+            AgregarOpciones(menuUnidad, actividades.Where(a => a.EsOriginal), "Proyectos originales");
+            AgregarOpciones(menuUnidad, actividades.Where(a => !a.EsOriginal), "Versiones integradas");
+        }
+    }
 
+    private void AgregarOpciones(ToolStripMenuItem menuUnidad, IEnumerable<ActividadInfo> actividades, string grupo)
+    {
+        List<ActividadInfo> lista = actividades.ToList();
+        if (lista.Count == 0) return;
+
+        if (menuUnidad.DropDownItems.Count > 0)
+            menuUnidad.DropDownItems.Add(new ToolStripSeparator());
+        menuUnidad.DropDownItems.Add(new ToolStripMenuItem(grupo) { Enabled = false });
+
+        foreach (ActividadInfo actividad in lista)
+        {
             ToolStripMenuItem opcion = new ToolStripMenuItem(actividad.Nombre)
             {
-                ToolTipText = actividad.Conceptos,
+                ToolTipText = $"{actividad.Origen}\n{actividad.Conceptos}",
                 Tag = actividad
             };
             opcion.Click += (_, _) => AbrirActividad(actividad);
@@ -92,9 +107,15 @@ public partial class FrmPrincipal : Form
                     Tag = actividad
                 };
                 EstilizarBotonNavegacion(boton);
+                if (!actividad.EsOriginal)
+                {
+                    // Las versiones integradas se distinguen de los proyectos originales.
+                    boton.ForeColor = Color.FromArgb(160, 172, 186);
+                    boton.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+                }
                 boton.Click += (_, _) => AbrirActividad(actividad);
                 flpActividades.Controls.Add(boton);
-                botonesNavegacion[actividad.TipoFormulario] = boton;
+                botonesNavegacion[actividad.Clave] = boton;
             }
         }
         flpActividades.ResumeLayout();
@@ -115,7 +136,7 @@ public partial class FrmPrincipal : Form
 
     private void MostrarInicio()
     {
-        navegador.Mostrar(typeof(FrmInicio), () =>
+        navegador.Mostrar(nameof(FrmInicio), () =>
         {
             FrmInicio inicio = new FrmInicio();
             inicio.ActividadSolicitada += (_, actividad) => AbrirActividad(actividad);
@@ -127,7 +148,7 @@ public partial class FrmPrincipal : Form
     {
         try
         {
-            navegador.Mostrar(actividad.TipoFormulario, actividad.Crear);
+            navegador.Mostrar(actividad.Clave, actividad.Crear);
         }
         catch (Exception ex)
         {
@@ -136,9 +157,9 @@ public partial class FrmPrincipal : Form
         }
     }
 
-    private void Navegador_FormularioMostrado(object? sender, Form formulario)
+    private void Navegador_FormularioMostrado(object? sender, string clave)
     {
-        ActividadInfo? actividad = CatalogoActividades.BuscarPorFormulario(formulario.GetType());
+        ActividadInfo? actividad = CatalogoActividades.BuscarPorClave(clave);
 
         if (actividad is null)
         {
@@ -149,13 +170,13 @@ public partial class FrmPrincipal : Form
         {
             UnidadInfo? unidad = CatalogoActividades.BuscarUnidad(actividad.Unidad);
             lblUnidadActual.Text = unidad?.TituloCompleto ?? $"Unidad {actividad.Unidad}";
-            lblEstado.Text = $"Actividad: {actividad.Nombre}  ·  Formulario: {actividad.Formulario}  ·  {actividad.Conceptos}";
+            lblEstado.Text = $"Actividad: {actividad.Nombre}  ·  {actividad.Origen}  ·  {actividad.Conceptos}";
         }
 
         // Resalta el botón de la actividad activa en el panel lateral.
-        foreach ((Type tipo, Button boton) in botonesNavegacion)
-            boton.BackColor = tipo == formulario.GetType() ? Tema.NavegacionActiva : Tema.Navegacion;
-        btnInicio.BackColor = formulario is FrmInicio ? Tema.NavegacionActiva : Tema.Navegacion;
+        foreach ((string claveBoton, Button boton) in botonesNavegacion)
+            boton.BackColor = claveBoton == clave ? Tema.NavegacionActiva : Tema.Navegacion;
+        btnInicio.BackColor = clave == nameof(FrmInicio) ? Tema.NavegacionActiva : Tema.Navegacion;
     }
 
     // ---------------- Eventos del menú ----------------

@@ -6,6 +6,40 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Carpeta del curso (INF-5130) donde viven los proyectos originales enlazados. -->
+    <CarpetaCurso>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\..'))</CarpetaCurso>
   </PropertyGroup>
+
+  <!--
+    PROYECTOS ORIGINALES ENLAZADOS
+    Se referencian en su ubicación actual, sin copiarlos ni modificarlos.
+  -->
+
+  <!-- Windows Forms: su formulario se muestra dentro de un UserControl (UcFormularioIncrustado). -->
+  <ItemGroup>
+    <!-- Prueba ("Menu Principal") se enlaza mediante Enlaces\MenuPrincipal.Enlace, porque su .csproj
+         original no compila por sí solo (ver el comentario en ese proyecto). -->
+    <ProjectReference Include="..\Enlaces\MenuPrincipal.Enlace\MenuPrincipal.Enlace.csproj" />
+    <ProjectReference Include="$(CarpetaCurso)\FormCursoEstudiante\FormCursoEstudiante.csproj" />
+    <ProjectReference Include="$(CarpetaCurso)\Pedidos\Pedidos.csproj" />
+  </ItemGroup>
+
+  <!-- Consola: solo se compilan junto con la solución; su ejecutable se abre en UcConsolaIncrustada. -->
+  <ItemGroup>
+    <ProjectReference Include="$(CarpetaCurso)\Prueba\RM_100758645_U1\MiPrimerPrograma.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="$(CarpetaCurso)\Prueba\RM_100758645_U2\Banco\Banco.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="$(CarpetaCurso)\Practica\Alquiler de vehiculos\Alquiler de vehiculos.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="$(CarpetaCurso)\SistemaVehiculos\SistemaVehiculos.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="$(CarpetaCurso)\Polimorfismo\Polimorfismo.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="$(CarpetaCurso)\ClasesAbstractas\ClasesAbstractas.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="$(CarpetaCurso)\Nomina\Nomina.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="$(CarpetaCurso)\Practica\Tryparse\Tryparse.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <!-- La aplicación necesita saber dónde están los originales y con qué configuración se compilaron. -->
+  <ItemGroup>
+    <AssemblyMetadata Include="CarpetaCurso" Value="$(CarpetaCurso)" />
+    <AssemblyMetadata Include="Configuracion" Value="$(Configuration)" />
+  </ItemGroup>
 
 </Project>

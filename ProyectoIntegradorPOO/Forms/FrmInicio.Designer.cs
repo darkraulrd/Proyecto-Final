@@ -107,7 +107,7 @@ partial class FrmInicio
         //
         // lblValorActividades
         //
-        lblValorActividades.Font = new Font("Segoe UI", 12F);
+        lblValorActividades.Font = new Font("Segoe UI", 10.5F);
         lblValorActividades.Location = new Point(14, 36);
         lblValorActividades.Name = "lblValorActividades";
         lblValorActividades.Size = new Size(296, 76);
