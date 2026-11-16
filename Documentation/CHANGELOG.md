@@ -2,6 +2,21 @@
 
 El formato sigue la idea de [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [3.0.0] — 2026-11-16
+
+### Cambiado
+- La aplicación se reescribió con la misma lógica de programación que *Registro Universitario* (INF-5120):
+  - ventana `Menu` con panel lateral de botones con íconos y `pnlContenido`, sin `MenuStrip`;
+  - un UserControl por pantalla (`ucInicio`, `ucUnidad`, `ucConsola`, `ucFormulario`) mostrado con `Mostrar(vista, botón)`;
+  - lambdas en el constructor y eventos `Action<T>` para navegar (`ProyectoSolicitado`, `VolverSolicitado`);
+  - clase abstracta `ProyectoCurso` con las hijas `ProyectoConsola` y `ProyectoFormulario`, que deciden su propia pantalla con `CrearVista()`;
+  - clase estática `Proyectos` con la lista de unidades y proyectos;
+  - un solo namespace con llaves, archivos en la raíz y colores definidos en cada pantalla.
+- La pantalla de inicio permite buscar proyectos y cada unidad tiene su propia pantalla con botón **Volver**.
+
+### Eliminado
+- `FrmPrincipal`, `FrmInicio`, `FrmAcercaDe`, `FrmActividadBase`, `FrmProyectoOriginal`, `Tema`, `Mensajes`, `NavegadorActividades` y `CatalogoActividades`, reemplazados por la estructura anterior.
+
 ## [2.0.0] — 2026-11-16
 
 ### Eliminado
