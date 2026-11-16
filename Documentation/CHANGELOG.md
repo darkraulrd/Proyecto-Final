@@ -2,6 +2,15 @@
 
 El formato sigue la idea de [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [2.0.0] — 2026-11-16
+
+### Eliminado
+- Las versiones integradas de las prácticas (formularios de `Forms/Unidad2…6`, `Models`, `Services`, `Repositories`, `Exceptions`, `Interfaces` y sus pruebas). La aplicación ahora muestra únicamente los proyectos originales del curso. Ese código sigue disponible en el historial de Git (versiones 1.0.0 a 1.1.0).
+
+### Cambiado
+- `CatalogoActividades` registra solo proyectos originales; la pantalla de inicio muestra proyecto, tipo, carpeta y conceptos.
+- Las consolas abiertas también se cierran si el proceso termina de forma inesperada (`ProcessExit`).
+
 ## [1.1.0] — 2026-11-16
 
 ### Agregado

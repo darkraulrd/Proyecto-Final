@@ -107,7 +107,7 @@ partial class FrmInicio
         //
         // lblValorActividades
         //
-        lblValorActividades.Font = new Font("Segoe UI", 10.5F);
+        lblValorActividades.Font = new Font("Segoe UI", 12F);
         lblValorActividades.Location = new Point(14, 36);
         lblValorActividades.Name = "lblValorActividades";
         lblValorActividades.Size = new Size(296, 76);
@@ -134,7 +134,7 @@ partial class FrmInicio
         lblListado.Name = "lblListado";
         lblListado.Size = new Size(380, 20);
         lblListado.TabIndex = 4;
-        lblListado.Text = "Actividades incorporadas (doble clic para abrir)";
+        lblListado.Text = "Proyectos del curso (doble clic para abrir)";
         //
         // dgvActividades
         //

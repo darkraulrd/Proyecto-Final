@@ -18,6 +18,6 @@ public partial class FrmAcercaDe : Form
             $"Versión {InformacionAplicacion.Version}\n\n" +
             $"{InformacionAplicacion.Asignatura}\n{InformacionAplicacion.Institucion}\nPeríodo {InformacionAplicacion.Periodo}\n\n" +
             $"Desarrollador: {InformacionAplicacion.Desarrollador}\nMatrícula: {InformacionAplicacion.Matricula}\n\n" +
-            "Tecnologías: C# · .NET 10 · Windows Forms · System.Text.Json · xUnit · Git";
+            "Tecnologías: C# · .NET 10 · Windows Forms · xUnit · Git";
     }
 }

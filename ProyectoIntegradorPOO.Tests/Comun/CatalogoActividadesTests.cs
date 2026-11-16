@@ -3,37 +3,21 @@ using ProyectoIntegradorPOO.Forms.Originales;
 
 namespace ProyectoIntegradorPOO.Tests.Comun;
 
-/// <summary>Protege la regla de conservación: cada unidad tiene actividades y ninguna pantalla se repite.</summary>
+/// <summary>Protege la regla de conservación: cada proyecto del curso sigue enlazado y accesible.</summary>
 public class CatalogoActividadesTests
 {
     [Fact]
-    public void CadaUnidadTieneAlMenosUnaActividad()
+    public void CadaUnidadTieneAlMenosUnProyecto()
     {
         foreach (UnidadInfo unidad in CatalogoActividades.Unidades)
             Assert.NotEmpty(CatalogoActividades.DeUnidad(unidad.Numero));
     }
 
     [Fact]
-    public void LasClavesNoSeRepitenYLasPantallasHeredanDeLaBase()
+    public void LasClavesNoSeRepiten()
     {
         List<string> claves = CatalogoActividades.Actividades.Select(a => a.Clave).ToList();
         Assert.Equal(claves.Count, claves.Distinct().Count());
-        Assert.All(CatalogoActividades.Actividades, a =>
-            Assert.True(typeof(FrmActividadBase).IsAssignableFrom(a.TipoFormulario), $"{a.Formulario} debe heredar de FrmActividadBase"));
-    }
-
-    [Theory]
-    [InlineData("FrmCuentaBancaria")]
-    [InlineData("FrmRelacionesClases")]
-    [InlineData("FrmHerencia")]
-    [InlineData("FrmClasesAbstractas")]
-    [InlineData("FrmPolimorfismo")]
-    [InlineData("FrmSobrecargaOperadores")]
-    [InlineData("FrmManejoExcepciones")]
-    [InlineData("FrmPersistenciaDatos")]
-    public void IncluyeLosFormulariosObligatorios(string formulario)
-    {
-        Assert.Contains(CatalogoActividades.Actividades, a => a.Formulario == formulario);
     }
 
     [Theory]
@@ -50,15 +34,15 @@ public class CatalogoActividadesTests
     [InlineData(@"Practica\Tryparse")]
     public void CadaProyectoOriginalEstaEnlazado(string carpeta)
     {
-        Assert.Contains(CatalogoActividades.Originales, a => a.Original!.Carpeta == carpeta);
+        Assert.Contains(CatalogoActividades.Actividades, a => a.Original.Carpeta == carpeta);
     }
 
     [Fact]
     public void LosProyectosOriginalesExistenYLosDeConsolaEstanCompilados()
     {
-        foreach (ActividadInfo actividad in CatalogoActividades.Originales)
+        foreach (ActividadInfo actividad in CatalogoActividades.Actividades)
         {
-            ProyectoOriginal proyecto = actividad.Original!;
+            ProyectoOriginal proyecto = actividad.Original;
             Assert.True(Directory.Exists(proyecto.RutaCarpeta), $"No existe la carpeta {proyecto.RutaCarpeta}");
 
             if (proyecto.Tipo == TipoProyectoOriginal.Consola)

@@ -51,28 +51,14 @@ public partial class FrmPrincipal : Form
             [6] = mnuUnidad6
         };
 
-        foreach ((int numero, ToolStripMenuItem menuUnidad) in menus)
+        foreach (ActividadInfo actividad in CatalogoActividades.Actividades)
         {
-            List<ActividadInfo> actividades = CatalogoActividades.DeUnidad(numero).ToList();
-            AgregarOpciones(menuUnidad, actividades.Where(a => a.EsOriginal), "Proyectos originales");
-            AgregarOpciones(menuUnidad, actividades.Where(a => !a.EsOriginal), "Versiones integradas");
-        }
-    }
+            if (!menus.TryGetValue(actividad.Unidad, out ToolStripMenuItem? menuUnidad))
+                continue;
 
-    private void AgregarOpciones(ToolStripMenuItem menuUnidad, IEnumerable<ActividadInfo> actividades, string grupo)
-    {
-        List<ActividadInfo> lista = actividades.ToList();
-        if (lista.Count == 0) return;
-
-        if (menuUnidad.DropDownItems.Count > 0)
-            menuUnidad.DropDownItems.Add(new ToolStripSeparator());
-        menuUnidad.DropDownItems.Add(new ToolStripMenuItem(grupo) { Enabled = false });
-
-        foreach (ActividadInfo actividad in lista)
-        {
             ToolStripMenuItem opcion = new ToolStripMenuItem(actividad.Nombre)
             {
-                ToolTipText = $"{actividad.Origen}\n{actividad.Conceptos}",
+                ToolTipText = $"{actividad.Origen} ({actividad.Tipo})\n{actividad.Conceptos}",
                 Tag = actividad
             };
             opcion.Click += (_, _) => AbrirActividad(actividad);
@@ -107,12 +93,6 @@ public partial class FrmPrincipal : Form
                     Tag = actividad
                 };
                 EstilizarBotonNavegacion(boton);
-                if (!actividad.EsOriginal)
-                {
-                    // Las versiones integradas se distinguen de los proyectos originales.
-                    boton.ForeColor = Color.FromArgb(160, 172, 186);
-                    boton.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-                }
                 boton.Click += (_, _) => AbrirActividad(actividad);
                 flpActividades.Controls.Add(boton);
                 botonesNavegacion[actividad.Clave] = boton;
