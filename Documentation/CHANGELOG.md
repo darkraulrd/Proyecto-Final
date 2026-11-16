@@ -2,6 +2,21 @@
 
 El formato sigue la idea de [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [4.0.0] — 2026-11-16
+
+### Cambiado
+- Aspecto de Windows Forms clásico: botones, `GroupBox`, `DataGridView` y `ListBox` con su estilo normal, sin colores personalizados ni íconos.
+- Código más simple:
+  - una sola clase `Proyecto` (en lugar de `ProyectoCurso`, `ProyectoConsola` y `ProyectoFormulario`);
+  - eventos `_Click` conectados en el diseñador;
+  - `ucUnidad` usa un `ListBox` con el detalle del proyecto seleccionado;
+  - `ucConsola` espera la ventana con un ciclo sencillo y tiene las funciones de Windows dentro de la misma clase.
+- `Nullable` desactivado en el proyecto.
+
+### Eliminado
+- `Unidad.cs`, `Ventanas.cs`, `InformacionAplicacion.cs`, la carpeta `Imagenes` y los recursos (`Properties/Resources`).
+- La búsqueda de la pantalla de inicio.
+
 ## [3.0.0] — 2026-11-16
 
 ### Cambiado

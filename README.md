@@ -8,12 +8,12 @@ Aplicación de escritorio en **C# / Windows Forms** que reúne en una sola venta
 
 ## Cómo funciona
 
-La ventana `Menu` sigue la misma lógica que el proyecto *Registro Universitario* (INF-5120): un panel lateral con botones y un panel de contenido donde se muestra un UserControl a la vez con `Mostrar(vista, botón)`.
+Es un Windows Forms clásico: la ventana `Menu` tiene a la izquierda los botones **Inicio**, **Unidad 1 … 6** (dentro de un `GroupBox`) y **Salir**, y a la derecha un panel donde se muestra un UserControl a la vez con `Mostrar(vista)`.
 
-- **Inicio** lista todos los proyectos, con búsqueda.
-- **Unidad 1 … 6** lista los proyectos de esa unidad.
+- **Inicio** (`ucInicio`) muestra todos los proyectos en un `DataGridView`.
+- **Unidad 1 … 6** (`ucUnidad`) muestra los proyectos de esa unidad en un `ListBox`, con su tipo, carpeta y conceptos.
 - Al abrir un proyecto:
-  - los de **consola** se ejecutan en una consola real de Windows dentro de `ucConsola` (con `ReadLine`, `ReadKey`, `Clear` y tildes como al abrirlos por separado), con botones **Ejecutar/Reiniciar** y **Detener**;
+  - los de **consola** se ejecutan en una consola de Windows dentro de `ucConsola` (con `ReadLine`, `ReadKey`, `Clear` y tildes como al abrirlos por separado), con botones **Ejecutar** y **Detener**;
   - los **Windows Forms** muestran su formulario original dentro de `ucFormulario`.
 - **Volver** regresa a la unidad. Cada proyecto conserva su estado al cambiar de pantalla y las consolas se cierran al salir.
 
@@ -62,15 +62,13 @@ INF-5130/
 │   ├── Enlaces/MenuPrincipal.Enlace/     Enlace a los archivos del formulario de INF-5130\Prueba
 │   ├── ProyectoIntegradorPOO/
 │   │   ├── Program.cs                    Abre el Menu
-│   │   ├── Menu.cs                       Ventana principal: panel lateral + Mostrar(vista, botón)
-│   │   ├── ucInicio.cs                   Todos los proyectos, con búsqueda
-│   │   ├── ucUnidad.cs                   Proyectos de una unidad
-│   │   ├── ucConsola.cs                  Proyecto de consola dentro de la aplicación
-│   │   ├── ucFormulario.cs               Proyecto Windows Forms dentro de la aplicación
-│   │   ├── ProyectoCurso.cs              Clase abstracta: ProyectoConsola y ProyectoFormulario
-│   │   ├── Proyectos.cs                  Lista de unidades y proyectos enlazados
-│   │   ├── Unidad.cs, InformacionAplicacion.cs, Ventanas.cs
-│   │   └── Imagenes/, Properties/        Íconos y recursos
+│   │   ├── Menu.cs                       Ventana principal: botones a la izquierda + Mostrar(vista)
+│   │   ├── ucInicio.cs                   Todos los proyectos (DataGridView)
+│   │   ├── ucUnidad.cs                   Proyectos de una unidad (ListBox)
+│   │   ├── ucConsola.cs                  Proyecto de consola dentro del programa
+│   │   ├── ucFormulario.cs               Proyecto Windows Forms dentro del programa
+│   │   ├── Proyecto.cs                   Datos de un proyecto
+│   │   └── Proyectos.cs                  Lista de unidades y proyectos enlazados
 │   └── ProyectoIntegradorPOO.Tests/      Pruebas xUnit
 ├── Prueba/, FormCursoEstudiante/, SistemaVehiculos/, Polimorfismo/, ClasesAbstractas/,
 │   Nomina/, Pedidos/, Practica/          ← proyectos originales enlazados (sin modificar)
@@ -81,5 +79,5 @@ Consulte [Documentation/ARCHITECTURE.md](Documentation/ARCHITECTURE.md) para la 
 ## Cómo enlazar un proyecto nuevo
 
 1. En `ProyectoIntegradorPOO/ProyectoIntegradorPOO.csproj`, agregar un `ProjectReference` a su `.csproj` (con `ReferenceOutputAssembly="false"` si es de consola).
-2. En `Proyectos.cs`, agregar una línea `new ProyectoConsola { ... }` o `new ProyectoFormulario { ... }` en su unidad. Inicio y la pantalla de la unidad se actualizan solos.
-3. Agregar la carpeta a la prueba `CadaProyectoOriginalEstaEnlazado` y actualizar `Documentation/`.
+2. En `Proyectos.cs`, agregar una línea `new Proyecto { ... }` en su unidad (con `EsConsola = true` y `Ejecutable` si es de consola, o con `CrearFormulario` si es Windows Forms). Inicio y la pantalla de la unidad se actualizan solos.
+3. Agregar la carpeta a la prueba `CadaProyectoEstaEnLaLista` y actualizar `Documentation/`.

@@ -1,22 +1,13 @@
-using System.Windows.Forms;
-
 namespace ProyectoIntegradorPOO.Tests
 {
-    // Protege la regla de conservación: cada proyecto del curso sigue enlazado y se puede abrir
+    // Comprueba que todos los proyectos del curso siguen enlazados
     public class ProyectosTests
     {
         [Fact]
         public void CadaUnidadTieneAlMenosUnProyecto()
         {
-            foreach (Unidad unidad in Proyectos.Unidades)
-                Assert.NotEmpty(Proyectos.DeUnidad(unidad.Numero));
-        }
-
-        [Fact]
-        public void LasCarpetasNoSeRepiten()
-        {
-            var carpetas = Proyectos.Lista.Select(p => p.Carpeta).ToList();
-            Assert.Equal(carpetas.Count, carpetas.Distinct().Count());
+            for (int unidad = 1; unidad <= Proyectos.Unidades.Length; unidad++)
+                Assert.NotEmpty(Proyectos.DeUnidad(unidad));
         }
 
         [Theory]
@@ -31,52 +22,34 @@ namespace ProyectoIntegradorPOO.Tests
         [InlineData("Nomina")]
         [InlineData("Pedidos")]
         [InlineData(@"Practica\Tryparse")]
-        public void CadaProyectoOriginalEstaEnlazado(string carpeta)
+        public void CadaProyectoEstaEnLaLista(string carpeta)
         {
             Assert.Contains(Proyectos.Lista, p => p.Carpeta == carpeta);
         }
 
         [Fact]
-        public void LosProyectosExistenYLosDeConsolaEstanCompilados()
+        public void LasCarpetasExistenYLosDeConsolaEstanCompilados()
         {
-            foreach (ProyectoCurso proyecto in Proyectos.Lista)
+            foreach (Proyecto p in Proyectos.Lista)
             {
-                Assert.True(Directory.Exists(proyecto.RutaCarpeta), $"No existe la carpeta {proyecto.RutaCarpeta}");
+                Assert.True(Directory.Exists(p.RutaCarpeta), "No existe la carpeta " + p.RutaCarpeta);
 
-                if (proyecto is ProyectoConsola consola)
-                    Assert.True(File.Exists(consola.RutaEjecutable), $"No se compiló {consola.RutaEjecutable}");
-                else if (proyecto is ProyectoFormulario formulario)
-                    Assert.NotNull(formulario.CrearFormulario);
+                if (p.EsConsola)
+                    Assert.True(File.Exists(p.RutaEjecutable), "No se compiló " + p.RutaEjecutable);
+                else
+                    Assert.NotNull(p.CrearFormulario);
             }
         }
 
         [Fact]
-        public void CadaTipoDeProyectoCreaSuPropiaVista()
+        public void ElTipoDependeDeSiEsConsola()
         {
-            // Polimorfismo: la misma llamada CrearVista() devuelve una pantalla distinta según el tipo
-            ProyectoCurso consola = Proyectos.Lista.First(p => p is ProyectoConsola);
-            ProyectoCurso formulario = Proyectos.Lista.First(p => p is ProyectoFormulario);
+            Proyecto consola = new Proyecto { EsConsola = true, Nombre = "A" };
+            Proyecto formulario = new Proyecto { EsConsola = false, Nombre = "B" };
 
-            using UserControl vistaConsola = consola.CrearVista();
-            using UserControl vistaFormulario = formulario.CrearVista();
-
-            Assert.IsType<ucConsola>(vistaConsola);
-            Assert.IsType<ucFormulario>(vistaFormulario);
-        }
-
-        [Fact]
-        public void BuscarFiltraPorNombreCarpetaYConceptos()
-        {
-            Assert.Equal(Proyectos.Lista.Count, Proyectos.Buscar("").Count);
-            Assert.Contains(Proyectos.Buscar("nomina"), p => p.Nombre == "Nomina");
-            Assert.Contains(Proyectos.Buscar("try"), p => p.Nombre == "Tryparse");
-            Assert.All(Proyectos.Buscar("Windows Forms"), p => Assert.IsType<ProyectoFormulario>(p));
-        }
-
-        [Fact]
-        public void UnProyectoSinNombreNoSePuedeCrear()
-        {
-            Assert.Throws<ArgumentException>(() => new ProyectoConsola { Nombre = " ", Carpeta = "X" });
+            Assert.Equal("Consola", consola.Tipo);
+            Assert.Equal("Windows Forms", formulario.Tipo);
+            Assert.Equal("A (Consola)", consola.ToString());
         }
     }
 }

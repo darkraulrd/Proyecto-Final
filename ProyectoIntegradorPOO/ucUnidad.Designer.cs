@@ -28,203 +28,165 @@ namespace ProyectoIntegradorPOO
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            pnlBarraColor = new Panel();
-            pnlCabecera = new Panel();
-            lblSubtitulo = new Label();
             lblTitulo = new Label();
-            pnlCuerpo = new Panel();
-            lblTotal = new Label();
-            dgvProyectos = new DataGridView();
-            Nombre = new DataGridViewTextBoxColumn();
-            Tipo = new DataGridViewTextBoxColumn();
-            UbicacionTexto = new DataGridViewTextBoxColumn();
-            Conceptos = new DataGridViewTextBoxColumn();
-            Abrir = new DataGridViewLinkColumn();
-            pnlCabecera.SuspendLayout();
-            pnlCuerpo.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvProyectos).BeginInit();
+            lblProyectos = new Label();
+            lstProyectos = new ListBox();
+            grpDetalle = new GroupBox();
+            lblConceptos = new Label();
+            lblConceptosTitulo = new Label();
+            lblCarpeta = new Label();
+            lblCarpetaTitulo = new Label();
+            lblTipo = new Label();
+            lblTipoTitulo = new Label();
+            btnAbrir = new Button();
+            grpDetalle.SuspendLayout();
             SuspendLayout();
-            //
-            // pnlBarraColor
-            //
-            pnlBarraColor.BackColor = Color.FromArgb(37, 99, 235);
-            pnlBarraColor.Dock = DockStyle.Top;
-            pnlBarraColor.Location = new Point(0, 0);
-            pnlBarraColor.Name = "pnlBarraColor";
-            pnlBarraColor.Size = new Size(880, 4);
-            pnlBarraColor.TabIndex = 0;
-            //
-            // pnlCabecera
-            //
-            pnlCabecera.BackColor = Color.FromArgb(219, 234, 254);
-            pnlCabecera.Controls.Add(lblSubtitulo);
-            pnlCabecera.Controls.Add(lblTitulo);
-            pnlCabecera.Dock = DockStyle.Top;
-            pnlCabecera.Location = new Point(0, 4);
-            pnlCabecera.Name = "pnlCabecera";
-            pnlCabecera.Size = new Size(880, 98);
-            pnlCabecera.TabIndex = 1;
-            //
-            // lblSubtitulo
-            //
-            lblSubtitulo.AutoSize = true;
-            lblSubtitulo.BackColor = Color.Transparent;
-            lblSubtitulo.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblSubtitulo.ForeColor = Color.FromArgb(75, 85, 99);
-            lblSubtitulo.Location = new Point(32, 59);
-            lblSubtitulo.Name = "lblSubtitulo";
-            lblSubtitulo.Size = new Size(320, 17);
-            lblSubtitulo.TabIndex = 1;
-            lblSubtitulo.Text = "Proyectos de esta unidad. Elige uno para abrirlo.";
             //
             // lblTitulo
             //
             lblTitulo.AutoSize = true;
-            lblTitulo.BackColor = Color.Transparent;
-            lblTitulo.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitulo.ForeColor = Color.FromArgb(37, 99, 235);
-            lblTitulo.Location = new Point(32, 24);
+            lblTitulo.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitulo.Location = new Point(20, 15);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(97, 32);
+            lblTitulo.Size = new Size(77, 25);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Unidad";
             //
-            // pnlCuerpo
+            // lblProyectos
             //
-            pnlCuerpo.Controls.Add(lblTotal);
-            pnlCuerpo.Controls.Add(dgvProyectos);
-            pnlCuerpo.Dock = DockStyle.Fill;
-            pnlCuerpo.Location = new Point(0, 102);
-            pnlCuerpo.Name = "pnlCuerpo";
-            pnlCuerpo.Size = new Size(880, 578);
-            pnlCuerpo.TabIndex = 2;
+            lblProyectos.AutoSize = true;
+            lblProyectos.Location = new Point(22, 60);
+            lblProyectos.Name = "lblProyectos";
+            lblProyectos.Size = new Size(61, 15);
+            lblProyectos.TabIndex = 1;
+            lblProyectos.Text = "Proyectos:";
             //
-            // lblTotal
+            // lstProyectos
             //
-            lblTotal.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            lblTotal.AutoSize = true;
-            lblTotal.ForeColor = Color.FromArgb(100, 116, 139);
-            lblTotal.Location = new Point(32, 532);
-            lblTotal.Name = "lblTotal";
-            lblTotal.Size = new Size(70, 15);
-            lblTotal.TabIndex = 1;
-            lblTotal.Text = "0 proyectos";
+            lstProyectos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            lstProyectos.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lstProyectos.FormattingEnabled = true;
+            lstProyectos.IntegralHeight = false;
+            lstProyectos.ItemHeight = 20;
+            lstProyectos.Location = new Point(22, 80);
+            lstProyectos.Name = "lstProyectos";
+            lstProyectos.Size = new Size(320, 480);
+            lstProyectos.TabIndex = 2;
+            lstProyectos.SelectedIndexChanged += lstProyectos_SelectedIndexChanged;
+            lstProyectos.DoubleClick += lstProyectos_DoubleClick;
             //
-            // dgvProyectos
+            // grpDetalle
             //
-            dgvProyectos.AllowUserToAddRows = false;
-            dgvProyectos.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(30, 41, 59);
-            dataGridViewCellStyle1.ForeColor = Color.FromArgb(219, 234, 254);
-            dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(30, 41, 59);
-            dataGridViewCellStyle1.SelectionForeColor = Color.FromArgb(248, 250, 252);
-            dgvProyectos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            dgvProyectos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvProyectos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvProyectos.BackgroundColor = Color.White;
-            dgvProyectos.BorderStyle = BorderStyle.None;
-            dgvProyectos.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(219, 234, 254);
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = Color.FromArgb(37, 99, 235);
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvProyectos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            dgvProyectos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvProyectos.Columns.AddRange(new DataGridViewColumn[] { Nombre, Tipo, UbicacionTexto, Conceptos, Abrir });
-            dgvProyectos.EnableHeadersVisualStyles = false;
-            dgvProyectos.Location = new Point(32, 32);
-            dgvProyectos.MultiSelect = false;
-            dgvProyectos.Name = "dgvProyectos";
-            dgvProyectos.ReadOnly = true;
-            dgvProyectos.RowHeadersVisible = false;
-            dgvProyectos.RowTemplate.Height = 38;
-            dgvProyectos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvProyectos.Size = new Size(816, 490);
-            dgvProyectos.TabIndex = 0;
+            grpDetalle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            grpDetalle.Controls.Add(lblConceptos);
+            grpDetalle.Controls.Add(lblConceptosTitulo);
+            grpDetalle.Controls.Add(lblCarpeta);
+            grpDetalle.Controls.Add(lblCarpetaTitulo);
+            grpDetalle.Controls.Add(lblTipo);
+            grpDetalle.Controls.Add(lblTipoTitulo);
+            grpDetalle.Location = new Point(362, 74);
+            grpDetalle.Name = "grpDetalle";
+            grpDetalle.Size = new Size(520, 200);
+            grpDetalle.TabIndex = 3;
+            grpDetalle.TabStop = false;
+            grpDetalle.Text = "Detalle del proyecto";
             //
-            // Nombre
+            // lblConceptos
             //
-            Nombre.DataPropertyName = "Nombre";
-            Nombre.FillWeight = 110F;
-            Nombre.HeaderText = "Proyecto";
-            Nombre.Name = "Nombre";
-            Nombre.ReadOnly = true;
+            lblConceptos.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lblConceptos.Location = new Point(100, 95);
+            lblConceptos.Name = "lblConceptos";
+            lblConceptos.Size = new Size(400, 90);
+            lblConceptos.TabIndex = 5;
+            lblConceptos.Text = "-";
             //
-            // Tipo
+            // lblConceptosTitulo
             //
-            Tipo.DataPropertyName = "Tipo";
-            Tipo.FillWeight = 70F;
-            Tipo.HeaderText = "Tipo";
-            Tipo.Name = "Tipo";
-            Tipo.ReadOnly = true;
+            lblConceptosTitulo.AutoSize = true;
+            lblConceptosTitulo.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblConceptosTitulo.Location = new Point(15, 95);
+            lblConceptosTitulo.Name = "lblConceptosTitulo";
+            lblConceptosTitulo.Size = new Size(68, 15);
+            lblConceptosTitulo.TabIndex = 4;
+            lblConceptosTitulo.Text = "Conceptos:";
             //
-            // UbicacionTexto
+            // lblCarpeta
             //
-            UbicacionTexto.DataPropertyName = "UbicacionTexto";
-            UbicacionTexto.FillWeight = 130F;
-            UbicacionTexto.HeaderText = "Carpeta";
-            UbicacionTexto.Name = "UbicacionTexto";
-            UbicacionTexto.ReadOnly = true;
+            lblCarpeta.AutoSize = true;
+            lblCarpeta.Location = new Point(100, 62);
+            lblCarpeta.Name = "lblCarpeta";
+            lblCarpeta.Size = new Size(12, 15);
+            lblCarpeta.TabIndex = 3;
+            lblCarpeta.Text = "-";
             //
-            // Conceptos
+            // lblCarpetaTitulo
             //
-            Conceptos.DataPropertyName = "Conceptos";
-            Conceptos.FillWeight = 200F;
-            Conceptos.HeaderText = "Conceptos";
-            Conceptos.Name = "Conceptos";
-            Conceptos.ReadOnly = true;
+            lblCarpetaTitulo.AutoSize = true;
+            lblCarpetaTitulo.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblCarpetaTitulo.Location = new Point(15, 62);
+            lblCarpetaTitulo.Name = "lblCarpetaTitulo";
+            lblCarpetaTitulo.Size = new Size(53, 15);
+            lblCarpetaTitulo.TabIndex = 2;
+            lblCarpetaTitulo.Text = "Carpeta:";
             //
-            // Abrir
+            // lblTipo
             //
-            Abrir.ActiveLinkColor = Color.FromArgb(21, 128, 61);
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            Abrir.DefaultCellStyle = dataGridViewCellStyle3;
-            Abrir.FillWeight = 50F;
-            Abrir.HeaderText = "Abrir";
-            Abrir.LinkColor = Color.FromArgb(21, 128, 61);
-            Abrir.Name = "Abrir";
-            Abrir.ReadOnly = true;
-            Abrir.Text = "Abrir";
-            Abrir.UseColumnTextForLinkValue = true;
-            Abrir.VisitedLinkColor = Color.FromArgb(21, 128, 61);
+            lblTipo.AutoSize = true;
+            lblTipo.Location = new Point(100, 30);
+            lblTipo.Name = "lblTipo";
+            lblTipo.Size = new Size(12, 15);
+            lblTipo.TabIndex = 1;
+            lblTipo.Text = "-";
+            //
+            // lblTipoTitulo
+            //
+            lblTipoTitulo.AutoSize = true;
+            lblTipoTitulo.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTipoTitulo.Location = new Point(15, 30);
+            lblTipoTitulo.Name = "lblTipoTitulo";
+            lblTipoTitulo.Size = new Size(35, 15);
+            lblTipoTitulo.TabIndex = 0;
+            lblTipoTitulo.Text = "Tipo:";
+            //
+            // btnAbrir
+            //
+            btnAbrir.Location = new Point(362, 290);
+            btnAbrir.Name = "btnAbrir";
+            btnAbrir.Size = new Size(130, 35);
+            btnAbrir.TabIndex = 4;
+            btnAbrir.Text = "Abrir proyecto";
+            btnAbrir.UseVisualStyleBackColor = true;
+            btnAbrir.Click += btnAbrir_Click;
             //
             // ucUnidad
             //
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(245, 247, 251);
-            Controls.Add(pnlCuerpo);
-            Controls.Add(pnlCabecera);
-            Controls.Add(pnlBarraColor);
+            Controls.Add(btnAbrir);
+            Controls.Add(grpDetalle);
+            Controls.Add(lstProyectos);
+            Controls.Add(lblProyectos);
+            Controls.Add(lblTitulo);
             Name = "ucUnidad";
-            Size = new Size(880, 680);
-            pnlCabecera.ResumeLayout(false);
-            pnlCabecera.PerformLayout();
-            pnlCuerpo.ResumeLayout(false);
-            pnlCuerpo.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvProyectos).EndInit();
+            Size = new Size(905, 625);
+            grpDetalle.ResumeLayout(false);
+            grpDetalle.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
-        private Panel pnlBarraColor;
-        private Panel pnlCabecera;
-        private Label lblSubtitulo;
         private Label lblTitulo;
-        private Panel pnlCuerpo;
-        private Label lblTotal;
-        private DataGridView dgvProyectos;
-        private DataGridViewTextBoxColumn Nombre;
-        private DataGridViewTextBoxColumn Tipo;
-        private DataGridViewTextBoxColumn UbicacionTexto;
-        private DataGridViewTextBoxColumn Conceptos;
-        private DataGridViewLinkColumn Abrir;
+        private Label lblProyectos;
+        private ListBox lstProyectos;
+        private GroupBox grpDetalle;
+        private Label lblConceptos;
+        private Label lblConceptosTitulo;
+        private Label lblCarpeta;
+        private Label lblCarpetaTitulo;
+        private Label lblTipo;
+        private Label lblTipoTitulo;
+        private Button btnAbrir;
     }
 }

@@ -2,89 +2,117 @@ namespace ProyectoIntegradorPOO
 {
     public partial class Menu : Form
     {
-        private static readonly Color ColorActivo = Color.FromArgb(37, 99, 235);
+        // Las pantallas se crean una sola vez y se reutilizan
+        private ucInicio vistaInicio = new ucInicio();
+        private ucUnidad vistaUnidad = new ucUnidad();
 
-        // Una sola pantalla de unidad: se recarga con la unidad elegida
-        private readonly ucUnidad vistaUnidad = new ucUnidad();
-
-        // Cada proyecto tiene su propia pantalla; se crea la primera vez y se reutiliza
-        // (así una consola sigue en ejecución aunque cambies de pantalla)
-        private readonly Dictionary<ProyectoCurso, UserControl> vistasProyecto = new Dictionary<ProyectoCurso, UserControl>();
-
-        private readonly Button[] botonesUnidad;
-        private readonly Button[] botones;
+        // Cada proyecto tiene su propia pantalla (así la consola no se cierra al cambiar de pantalla)
+        private Dictionary<Proyecto, UserControl> vistasProyecto = new Dictionary<Proyecto, UserControl>();
 
         public Menu()
         {
             InitializeComponent();
 
-            botonesUnidad = new[] { btnUnidad1, btnUnidad2, btnUnidad3, btnUnidad4, btnUnidad5, btnUnidad6 };
-            botones = new[] { btnMenuInicio }.Concat(botonesUnidad).ToArray();
+            vistaInicio.AbrirProyecto += AbrirProyecto;
+            vistaUnidad.AbrirProyecto += AbrirProyecto;
 
-            btnMenuInicio.Click += (s, e) => Mostrar(ucInicio1, btnMenuInicio);
-            for (int i = 0; i < botonesUnidad.Length; i++)
-            {
-                int numero = i + 1;   // copia para la lambda
-                botonesUnidad[i].Click += (s, e) => MostrarUnidad(numero);
-            }
-            btnSalir.Click += (s, e) => PedirSalir();
-
-            // Desde Inicio o desde una unidad: abrir un proyecto
-            ucInicio1.ProyectoSolicitado += AbrirProyecto;
-            vistaUnidad.ProyectoSolicitado += AbrirProyecto;
-
-            // Al cerrar, también se cierran las consolas abiertas
-            FormClosed += (s, e) =>
-            {
-                foreach (UserControl vista in vistasProyecto.Values)
-                    vista.Dispose();
-                ucConsola.TerminarTodas();
-            };
-
-            Text = $"{InformacionAplicacion.Nombre} — {InformacionAplicacion.Asignatura}";
-            Mostrar(ucInicio1, btnMenuInicio);
+            Mostrar(vistaInicio);
         }
 
-        private void MostrarUnidad(int numero)
+        // Pone una pantalla en el panel de la derecha
+        private void Mostrar(UserControl vista)
         {
-            vistaUnidad.Cargar(Proyectos.BuscarUnidad(numero));
-            Mostrar(vistaUnidad, botonesUnidad[numero - 1]);
-        }
-
-        private void AbrirProyecto(ProyectoCurso proyecto)
-        {
-            if (!vistasProyecto.TryGetValue(proyecto, out UserControl? vista))
-            {
-                vista = proyecto.CrearVista();   // cada tipo de proyecto crea su pantalla
-
-                // "Volver" regresa a la unidad del proyecto
-                if (vista is ucConsola consola) consola.VolverSolicitado += () => MostrarUnidad(proyecto.Unidad);
-                if (vista is ucFormulario formulario) formulario.VolverSolicitado += () => MostrarUnidad(proyecto.Unidad);
-
-                vistasProyecto[proyecto] = vista;
-            }
-
-            Mostrar(vista, botonesUnidad[proyecto.Unidad - 1]);
-        }
-
-        private void Mostrar(UserControl vista, Button activo)
-        {
-            pnlContenido.Controls.Clear();   // quita la vista anterior sin destruirla
+            pnlContenido.Controls.Clear();
             vista.Dock = DockStyle.Fill;
             pnlContenido.Controls.Add(vista);
-
-            foreach (Button boton in botones)
-                boton.BackColor = pnlMenu.BackColor;
-            activo.BackColor = ColorActivo;
         }
 
-        private void PedirSalir()
+        private void MostrarUnidad(int unidad)
         {
-            var respuesta = MessageBox.Show("¿Deseas salir del Sistema Integrador?", "Salir",
+            vistaUnidad.Cargar(unidad);
+            Mostrar(vistaUnidad);
+        }
+
+        private void AbrirProyecto(Proyecto proyecto)
+        {
+            // Si ya se abrió antes, se usa la misma pantalla
+            if (vistasProyecto.ContainsKey(proyecto))
+            {
+                Mostrar(vistasProyecto[proyecto]);
+                return;
+            }
+
+            if (proyecto.EsConsola)
+            {
+                ucConsola consola = new ucConsola();
+                consola.Cargar(proyecto);
+                consola.Volver += () => MostrarUnidad(proyecto.Unidad);
+                vistasProyecto.Add(proyecto, consola);
+                Mostrar(consola);
+            }
+            else
+            {
+                ucFormulario formulario = new ucFormulario();
+                formulario.Cargar(proyecto);
+                formulario.Volver += () => MostrarUnidad(proyecto.Unidad);
+                vistasProyecto.Add(proyecto, formulario);
+                Mostrar(formulario);
+            }
+        }
+
+        private void btnInicio_Click(object sender, EventArgs e)
+        {
+            Mostrar(vistaInicio);
+        }
+
+        private void btnUnidad1_Click(object sender, EventArgs e)
+        {
+            MostrarUnidad(1);
+        }
+
+        private void btnUnidad2_Click(object sender, EventArgs e)
+        {
+            MostrarUnidad(2);
+        }
+
+        private void btnUnidad3_Click(object sender, EventArgs e)
+        {
+            MostrarUnidad(3);
+        }
+
+        private void btnUnidad4_Click(object sender, EventArgs e)
+        {
+            MostrarUnidad(4);
+        }
+
+        private void btnUnidad5_Click(object sender, EventArgs e)
+        {
+            MostrarUnidad(5);
+        }
+
+        private void btnUnidad6_Click(object sender, EventArgs e)
+        {
+            MostrarUnidad(6);
+        }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void Menu_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult respuesta = MessageBox.Show("¿Desea salir del programa?", "Salir",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (respuesta == DialogResult.Yes)
-                Close();
+            if (respuesta == DialogResult.No)
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            // Cierra las consolas que hayan quedado abiertas
+            ucConsola.CerrarTodas();
         }
     }
 }

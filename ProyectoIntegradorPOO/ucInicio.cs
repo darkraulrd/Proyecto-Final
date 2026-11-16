@@ -1,61 +1,38 @@
-using System.ComponentModel;
-
 namespace ProyectoIntegradorPOO
 {
     public partial class ucInicio : UserControl
     {
-        // El Menu escucha este aviso y abre el proyecto
-        public event Action<ProyectoCurso>? ProyectoSolicitado;
+        // Avisa al Menu qué proyecto se quiere abrir
+        public event Action<Proyecto> AbrirProyecto;
 
         public ucInicio()
         {
             InitializeComponent();
+        }
 
+        private void ucInicio_Load(object sender, EventArgs e)
+        {
             dgvProyectos.AutoGenerateColumns = false;
-            dgvProyectos.CellContentClick += dgvProyectos_CellContentClick;
-            dgvProyectos.CellDoubleClick += (s, e) => Solicitar(e.RowIndex);
+            dgvProyectos.DataSource = Proyectos.Lista;
+        }
 
-            btnBuscar.Click += (s, e) => Recargar();
-            txtBuscar.KeyDown += (s, e) =>
+        private void btnAbrir_Click(object sender, EventArgs e)
+        {
+            if (dgvProyectos.CurrentRow == null)
             {
-                if (e.KeyCode == Keys.Enter)
-                {
-                    e.SuppressKeyPress = true;
-                    Recargar();
-                }
-            };
+                MessageBox.Show("Seleccione un proyecto de la lista.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
 
-            VisibleChanged += (s, e) => { if (Visible) Recargar(); };
+            Proyecto proyecto = (Proyecto)dgvProyectos.CurrentRow.DataBoundItem;
+            AbrirProyecto?.Invoke(proyecto);
         }
 
-        public void Recargar()
+        private void dgvProyectos_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime) return;
-
-            var proyectos = Proyectos.Buscar(txtBuscar.Text.Trim());
-
-            dgvProyectos.DataSource = proyectos;
-            dgvProyectos.ClearSelection();
-
-            lblSubtitulo.Text = $"{InformacionAplicacion.Asignatura} · {InformacionAplicacion.Desarrollador} ({InformacionAplicacion.Matricula}) · " +
-                                "Elige un proyecto para abrirlo aquí mismo.";
-            lblTotal.Text = $"{proyectos.Count} " +
-                (proyectos.Count == 1 ? "proyecto enlazado" : "proyectos enlazados") +
-                $"  ·  {Proyectos.Unidades.Count} unidades";
-        }
-
-        private void dgvProyectos_CellContentClick(object? sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0) return;
-            if (dgvProyectos.Columns[e.ColumnIndex].Name != "Abrir") return;
-            Solicitar(e.RowIndex);
-        }
-
-        private void Solicitar(int fila)
-        {
-            if (fila < 0) return;
-            if (dgvProyectos.Rows[fila].DataBoundItem is not ProyectoCurso proyecto) return;
-            ProyectoSolicitado?.Invoke(proyecto);
+            if (e.RowIndex >= 0)
+                btnAbrir_Click(sender, e);
         }
     }
 }

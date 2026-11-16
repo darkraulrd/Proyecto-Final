@@ -2,46 +2,36 @@
 
 ## Visión general
 
-Una aplicación Windows Forms que funciona como **lanzador integrado** de los proyectos del curso. Sigue la misma lógica que *Registro Universitario* (INF-5120):
+Una aplicación Windows Forms clásica que abre, dentro de su ventana, los proyectos hechos en el curso. Usa controles con su estilo normal de Windows (botones, `GroupBox`, `DataGridView`, `ListBox`) y una estructura sencilla:
 
-- una ventana `Menu` con un **panel lateral** de botones (`pnlMenu`) y un **panel de contenido** (`pnlContenido`);
-- **un UserControl por pantalla**, creado una sola vez y guardado en un campo `readonly`;
-- un único método **`Mostrar(UserControl vista, Button activo)`** que quita la vista anterior sin destruirla, pone la nueva y resalta el botón;
-- los clics se conectan con **lambdas** en el constructor y las vistas avisan al `Menu` con **eventos `Action<T>`**;
-- un solo namespace con llaves y todos los archivos en la raíz del proyecto.
+- una ventana `Menu` con botones a la izquierda (`pnlMenu`) y un panel a la derecha (`pnlContenido`);
+- un UserControl por pantalla; el `Menu` los guarda en variables y los muestra con `Mostrar(vista)`;
+- los botones llaman a sus métodos `_Click` (conectados en el diseñador) y las pantallas avisan al `Menu` con eventos (`AbrirProyecto`, `Volver`).
 
 ```
-┌────────────── Menu ──────────────┬──────────────────── pnlContenido ─────────────────────┐
-│ pnlMarca (logo + nombre)         │                                                        │
-│ btnMenuInicio ─────────────────► │ ucInicio      (todos los proyectos, búsqueda)          │
-│ btnUnidad1 … btnUnidad6 ───────► │ ucUnidad      (vistaUnidad.Cargar(unidad))             │
-│                                  │   └ ProyectoSolicitado ─► AbrirProyecto(p)              │
-│                                  │        p.CrearVista() ─► ucConsola  (consola)           │
-│                                  │                        └► ucFormulario (Windows Forms)  │
-│                                  │        VolverSolicitado ─► MostrarUnidad(p.Unidad)       │
-│ btnSalir                         │                                                        │
-└──────────────────────────────────┴────────────────────────────────────────────────────────┘
+┌──────── Menu ────────┬──────────────── pnlContenido ─────────────────┐
+│ [Inicio] ──────────► │ ucInicio      (DataGridView con todos)        │
+│ ┌ Unidades ┐         │                                               │
+│ │[Unidad 1]│ ──────► │ ucUnidad      (ListBox con los de la unidad)  │
+│ │   ...    │         │   └ AbrirProyecto ─► Menu.AbrirProyecto(p)    │
+│ │[Unidad 6]│         │        si p.EsConsola ─► ucConsola            │
+│ └──────────┘         │        si no          ─► ucFormulario         │
+│ [Salir]              │        Volver ─► MostrarUnidad(p.Unidad)      │
+└──────────────────────┴───────────────────────────────────────────────┘
 ```
 
-## Clases
+## Archivos
 
-| Archivo | Responsabilidad |
+| Archivo | Qué hace |
 |---|---|
-| `Program.cs` | Punto de entrada: abre el `Menu`. |
-| `Menu.cs` | Ventana principal. Conecta los botones, guarda las vistas (`vistaUnidad` y un `Dictionary` con la vista de cada proyecto) y las muestra con `Mostrar`. Al cerrarse, cierra las consolas. |
-| `ucInicio.cs` | Tabla con todos los proyectos y búsqueda. Evento `ProyectoSolicitado`. |
-| `ucUnidad.cs` | Tabla con los proyectos de una unidad (`Cargar(unidad)`). Evento `ProyectoSolicitado`. |
-| `ucConsola.cs` | Ejecuta un proyecto de consola dentro de la aplicación. Botones Ejecutar/Reiniciar, Detener y Volver. |
-| `ucFormulario.cs` | Muestra el formulario original de un proyecto Windows Forms. Botones Abrir/Reiniciar y Volver. |
-| `ProyectoCurso.cs` | Clase **abstracta** con lo común (unidad, nombre, carpeta, conceptos) y los miembros abstractos `Tipo` y `CrearVista()`. |
-| `ProyectoConsola.cs` | Hija de `ProyectoCurso`: sabe dónde está su `.exe` y crea un `ucConsola`. |
-| `ProyectoFormulario.cs` | Hija de `ProyectoCurso`: sabe crear su formulario y crea un `ucFormulario`. |
-| `Proyectos.cs` | Clase estática con la lista de unidades y proyectos, búsqueda y la ubicación de `INF-5130`. |
-| `Unidad.cs` | Número y título de una unidad. |
-| `Ventanas.cs` | Funciones de `user32.dll` para meter la ventana de la consola dentro del panel. |
-| `InformacionAplicacion.cs` | Nombre, asignatura y desarrollador. |
-
-`AbrirProyecto` no pregunta qué tipo de proyecto es: llama a `proyecto.CrearVista()` y cada clase hija devuelve su propia pantalla (polimorfismo).
+| `Program.cs` | Abre el `Menu`. |
+| `Menu.cs` | Ventana principal. Muestra las pantallas, abre los proyectos y, al salir, cierra las consolas. |
+| `ucInicio.cs` | Tabla (`DataGridView`) con todos los proyectos y botón **Abrir proyecto**. |
+| `ucUnidad.cs` | `ListBox` con los proyectos de una unidad, su detalle y botón **Abrir proyecto**. |
+| `ucConsola.cs` | Abre el `.exe` de un proyecto de consola y lo pone dentro de su panel. Botones **Ejecutar**, **Detener** y **Volver**. |
+| `ucFormulario.cs` | Abre el formulario de un proyecto Windows Forms dentro de su panel. Botones **Abrir de nuevo** y **Volver**. |
+| `Proyecto.cs` | Datos de un proyecto: unidad, nombre, carpeta, conceptos, si es de consola, ejecutable o formulario. |
+| `Proyectos.cs` | Lista de unidades y proyectos (`Lista`, `DeUnidad`) y la ubicación de la carpeta `INF-5130`. |
 
 ## Enlace con los proyectos originales
 
@@ -53,11 +43,11 @@ INF-5130\
 └── <carpetas originales sin modificar>
 ```
 
-- **Compilación:** los `ProjectReference` hacen que al compilar el integrador se compilen también los originales. La ruta de `INF-5130` y la configuración (`Debug`/`Release`) se graban en el ensamblado con `AssemblyMetadata`; `Proyectos` las lee para encontrar cada `.exe`, sin rutas fijas en el código.
-- **Consola (`ucConsola`):** inicia el `.exe` con `conhost.exe` (la consola clásica de Windows, que se puede meter en otra ventana), localiza la ventana del programa, le quita los bordes y la convierte en hija de `pnlConsola` (`SetParent`, `MoveWindow`). Los procesos se cierran al pulsar Detener, al cerrar el `Menu` y si la aplicación termina (`ProcessExit`).
-- **Windows Forms (`ucFormulario`):** crea el formulario original con `TopLevel = false` y lo coloca en un panel con desplazamiento, sin cambiar su aspecto.
+- **Compilación:** los `ProjectReference` hacen que al compilar el integrador se compilen también los originales. La ruta de `INF-5130` y la configuración (`Debug`/`Release`) se guardan en el programa con `AssemblyMetadata`; `Proyectos` las lee para encontrar cada `.exe`.
+- **Consola (`ucConsola`):** abre el `.exe` con `conhost.exe` (la consola clásica de Windows), busca la ventana del programa y con `SetWindowLong`, `SetParent` y `MoveWindow` (de `user32.dll`) la pone dentro de `pnlConsola`, sin bordes. Como es una consola de verdad, `ReadLine`, `ReadKey`, `Clear` y las tildes funcionan igual. Las consolas se cierran con **Detener** y al salir del programa.
+- **Windows Forms (`ucFormulario`):** crea el formulario original con `TopLevel = false` y lo agrega a `pnlFormulario`, sin cambiar su aspecto.
 - **`Prueba` (Menu Principal):** su `.csproj` no compila por sí solo (incluye los `.cs` de sus subproyectos y `Program.cs` crea `new Menu()` en vez de `Form1`). `MenuPrincipal.Enlace` compila solo `Menu.cs`, `Menu.Designer.cs` y `Menu.resx` mediante `Link`, sin tocar el original.
 
 ## Dependencias externas
 
-Solo la biblioteca estándar de .NET y la API de Windows (`user32.dll`). El proyecto de pruebas usa xUnit, `Microsoft.NET.Test.Sdk` y `coverlet.collector`.
+Solo .NET y la API de Windows (`user32.dll`). El proyecto de pruebas usa xUnit.

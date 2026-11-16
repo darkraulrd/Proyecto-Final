@@ -2,45 +2,55 @@ namespace ProyectoIntegradorPOO
 {
     public partial class ucUnidad : UserControl
     {
-        // El Menu escucha este aviso y abre el proyecto
-        public event Action<ProyectoCurso>? ProyectoSolicitado;
+        // Avisa al Menu qué proyecto se quiere abrir
+        public event Action<Proyecto> AbrirProyecto;
 
         public ucUnidad()
         {
             InitializeComponent();
-
-            dgvProyectos.AutoGenerateColumns = false;
-            dgvProyectos.CellContentClick += (s, e) =>
-            {
-                if (e.RowIndex >= 0 && dgvProyectos.Columns[e.ColumnIndex].Name == "Abrir")
-                    Solicitar(e.RowIndex);
-            };
-            dgvProyectos.CellDoubleClick += (s, e) => Solicitar(e.RowIndex);
-
-            // Al terminar de cargar la tabla, ninguna fila queda marcada
-            dgvProyectos.DataBindingComplete += (s, e) =>
-            {
-                dgvProyectos.ClearSelection();
-                dgvProyectos.CurrentCell = null;
-            };
         }
 
-        // Muestra los proyectos de la unidad elegida en el menú
-        public void Cargar(Unidad unidad)
+        // Muestra los proyectos de la unidad que se eligió en el menú
+        public void Cargar(int unidad)
         {
-            var proyectos = Proyectos.DeUnidad(unidad.Numero);
+            lblTitulo.Text = Proyectos.Unidades[unidad - 1];
 
-            lblTitulo.Text = unidad.TituloCompleto;
-            dgvProyectos.DataSource = proyectos;
-            dgvProyectos.ClearSelection();
-            lblTotal.Text = $"{proyectos.Count} " + (proyectos.Count == 1 ? "proyecto" : "proyectos");
+            lstProyectos.Items.Clear();
+            foreach (Proyecto p in Proyectos.DeUnidad(unidad))
+            {
+                lstProyectos.Items.Add(p);
+            }
+
+            if (lstProyectos.Items.Count > 0)
+                lstProyectos.SelectedIndex = 0;
         }
 
-        private void Solicitar(int fila)
+        private void lstProyectos_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (fila < 0) return;
-            if (dgvProyectos.Rows[fila].DataBoundItem is not ProyectoCurso proyecto) return;
-            ProyectoSolicitado?.Invoke(proyecto);
+            Proyecto proyecto = lstProyectos.SelectedItem as Proyecto;
+            if (proyecto == null) return;
+
+            lblTipo.Text = proyecto.Tipo;
+            lblCarpeta.Text = "INF-5130\\" + proyecto.Carpeta;
+            lblConceptos.Text = proyecto.Conceptos;
+        }
+
+        private void btnAbrir_Click(object sender, EventArgs e)
+        {
+            Proyecto proyecto = lstProyectos.SelectedItem as Proyecto;
+            if (proyecto == null)
+            {
+                MessageBox.Show("Seleccione un proyecto de la lista.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            AbrirProyecto?.Invoke(proyecto);
+        }
+
+        private void lstProyectos_DoubleClick(object sender, EventArgs e)
+        {
+            btnAbrir_Click(sender, e);
         }
     }
 }

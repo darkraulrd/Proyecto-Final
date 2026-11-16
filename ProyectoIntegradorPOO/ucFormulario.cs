@@ -1,87 +1,64 @@
 namespace ProyectoIntegradorPOO
 {
-    // Muestra el formulario original de un proyecto Windows Forms dentro de la aplicación,
-    // con su diseño propio. Si se cierra (por ejemplo con su botón "Salir"), se puede abrir de nuevo.
+    // Muestra el formulario de un proyecto de Windows Forms dentro del programa
     public partial class ucFormulario : UserControl
     {
-        private ProyectoFormulario? proyecto;
-        private Form? formulario;
-        private bool yaAbrio;
+        private Proyecto proyecto;
+        private Form formulario;
 
-        // El Menu escucha este aviso y regresa a la unidad
-        public event Action? VolverSolicitado;
+        // Avisa al Menu que se quiere volver a la unidad
+        public event Action Volver;
 
         public ucFormulario()
         {
             InitializeComponent();
+        }
 
-            btnAbrir.Click += (s, e) => Abrir();
-            btnVolver.Click += (s, e) => VolverSolicitado?.Invoke();
+        public void Cargar(Proyecto p)
+        {
+            proyecto = p;
+            lblTitulo.Text = p.Nombre;
+            lblDatos.Text = "Unidad " + p.Unidad + "  |  Windows Forms  |  INF-5130\\" + p.Carpeta + "  |  " + p.Conceptos;
+        }
 
-            // La primera vez que se muestra, el formulario se abre solo
-            Load += (s, e) =>
+        private void ucFormulario_Load(object sender, EventArgs e)
+        {
+            AbrirFormulario();
+        }
+
+        private void btnAbrir_Click(object sender, EventArgs e)
+        {
+            AbrirFormulario();
+        }
+
+        private void btnVolver_Click(object sender, EventArgs e)
+        {
+            Volver?.Invoke();
+        }
+
+        private void AbrirFormulario()
+        {
+            // Si ya había uno abierto, se cierra primero
+            if (formulario != null)
             {
-                if (yaAbrio || DesignMode) return;
-                yaAbrio = true;
-                BeginInvoke(new Action(Abrir));
-            };
-        }
-
-        public void Cargar(ProyectoFormulario proyecto)
-        {
-            this.proyecto = proyecto;
-            lblTitulo.Text = proyecto.Nombre;
-            lblSubtitulo.Text = $"Unidad {proyecto.Unidad} · Windows Forms · {proyecto.UbicacionTexto} · {proyecto.Conceptos}";
-        }
-
-        private void Abrir()
-        {
-            Cerrar();
-            if (proyecto?.CrearFormulario == null) return;
+                formulario.Close();
+                formulario = null;
+            }
 
             try
             {
                 formulario = proyecto.CrearFormulario();
-                formulario.TopLevel = false;                     // deja de ser ventana suelta
+                formulario.TopLevel = false;   // para que pueda ir dentro del panel
                 formulario.FormBorderStyle = FormBorderStyle.None;
-                formulario.Location = new Point(32, 24);
-                formulario.FormClosed += Formulario_FormClosed;
-
+                formulario.Location = new Point(0, 0);
                 pnlFormulario.Controls.Add(formulario);
-                lblAviso.Visible = false;
                 formulario.Show();
-
-                lblEstado.Text = $"Formulario {formulario.GetType().FullName} · {formulario.ClientSize.Width} × {formulario.ClientSize.Height}";
-                btnAbrir.Text = "Reiniciar";
             }
             catch (Exception ex)
             {
-                formulario = null;
-                MostrarAviso("No se pudo abrir el formulario.\n\n" + ex.Message);
+                MessageBox.Show("No se pudo abrir el formulario.\n" + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void Formulario_FormClosed(object? sender, FormClosedEventArgs e)
-        {
-            formulario = null;
-            MostrarAviso("El formulario se cerró.\nPulsa «Abrir» para usarlo de nuevo.");
-            btnAbrir.Text = "Abrir";
-        }
-
-        private void Cerrar()
-        {
-            if (formulario == null) return;
-            formulario.FormClosed -= Formulario_FormClosed;
-            formulario.Close();
-            formulario.Dispose();
-            formulario = null;
-        }
-
-        private void MostrarAviso(string texto)
-        {
-            lblAviso.Text = texto;
-            lblAviso.Visible = true;
-            lblAviso.BringToFront();
         }
     }
 }
