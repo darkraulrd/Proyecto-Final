@@ -2,6 +2,13 @@
 
 El formato sigue la idea de [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [4.1.0] — 2026-11-16
+
+### Cambiado
+- Pedidos (FoodExpress) se abre en su propia ventana, con su tamaño original de 1120 × 680, porque no cabe dentro del programa. Nueva propiedad `Proyecto.AbrirAparte`.
+  - Si la ventana ya está abierta, «Abrir ventana» la trae al frente en vez de abrir otra.
+  - La ventana se cierra junto con el programa.
+
 ## [4.0.0] — 2026-11-16
 
 ### Cambiado

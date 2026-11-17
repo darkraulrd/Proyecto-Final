@@ -13,7 +13,7 @@ Los proyectos entregados durante el curso se muestran **tal como están**, dentr
 | 4 | Polimorfismo (Lab 4.2) | `Polimorfismo` | Consola | `ucConsola` | `virtual` / `override` |
 | 4 | ClasesAbstractas (Lab 4.3) | `ClasesAbstractas` | Consola | `ucConsola` | Clases abstractas |
 | 4 | Nomina | `Nomina` | Consola | `ucConsola` | Herencia, métodos sobrescritos |
-| 5 | Pedidos (FoodExpress) | `Pedidos` | Windows Forms | `ucFormulario` | Polimorfismo, operador `+`, UserControls, JSON |
+| 5 | Pedidos (FoodExpress) | `Pedidos` | Windows Forms | Ventana aparte (mide 1120 × 680 y no cabe dentro) | Polimorfismo, operador `+`, UserControls, JSON |
 | 6 | Tryparse | `Practica\Tryparse` | Consola | `ucConsola` | `try` / `catch` / `finally` |
 
 ## No enlazados

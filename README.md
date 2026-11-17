@@ -14,7 +14,7 @@ Es un Windows Forms clásico: la ventana `Menu` tiene a la izquierda los botones
 - **Unidad 1 … 6** (`ucUnidad`) muestra los proyectos de esa unidad en un `ListBox`, con su tipo, carpeta y conceptos.
 - Al abrir un proyecto:
   - los de **consola** se ejecutan en una consola de Windows dentro de `ucConsola` (con `ReadLine`, `ReadKey`, `Clear` y tildes como al abrirlos por separado), con botones **Ejecutar** y **Detener**;
-  - los **Windows Forms** muestran su formulario original dentro de `ucFormulario`.
+  - los **Windows Forms** muestran su formulario original dentro de `ucFormulario`. Pedidos (FoodExpress), que mide 1120 × 680 y no cabe, se abre en su propia ventana con su tamaño original (`AbrirAparte = true`).
 - **Volver** regresa a la unidad. Cada proyecto conserva su estado al cambiar de pantalla y las consolas se cierran al salir.
 
 Los proyectos originales viven en sus propias carpetas dentro de `INF-5130` y **no se copian ni se modifican**: la solución los enlaza con referencias de proyecto y los compila junto con el integrador. La lista completa está en [Documentation/ACTIVIDADES.md](Documentation/ACTIVIDADES.md).

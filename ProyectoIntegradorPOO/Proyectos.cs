@@ -49,7 +49,8 @@ namespace ProyectoIntegradorPOO
                 Conceptos = "Herencia: Programador y Diseñador sobrescriben CalcularPago()." },
 
             // Unidad 5
-            new Proyecto { Unidad = 5, Nombre = "Pedidos (FoodExpress)", Carpeta = "Pedidos", CrearFormulario = () => new Pedidos.Menu(),
+            // Su ventana mide 1120 x 680 y no cabe dentro del programa: se abre aparte
+            new Proyecto { Unidad = 5, Nombre = "Pedidos (FoodExpress)", Carpeta = "Pedidos", CrearFormulario = () => new Pedidos.Menu(), AbrirAparte = true,
                 Conceptos = "Polimorfismo, sobrecarga del operador +, UserControls y JSON." },
 
             // Unidad 6

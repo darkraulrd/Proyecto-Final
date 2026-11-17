@@ -15,6 +15,9 @@ namespace ProyectoIntegradorPOO
         // Solo para los de Windows Forms: crea el formulario principal
         public Func<Form> CrearFormulario { get; set; }
 
+        // Para formularios muy grandes: se abren en su propia ventana en vez de dentro del programa
+        public bool AbrirAparte { get; set; }
+
         public string Tipo
         {
             get
